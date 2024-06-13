@@ -9,7 +9,34 @@ const getAllUsers = async () => {
 const getAllProducts = async () => {
   const response = await client.query(`SELECT * FROM products ORDER BY id ASC`);
   return response.rows;
+};const getProductById = async (id) => {
+  const response = await client.query(`SELECT * FROM products WHERE id = $1`, [id]);
+  return response.rows[0];
 };
+
+const createProduct = async (product) => {
+  const { name, price, description, category } = product;
+  const response = await client.query(
+    `INSERT INTO products (name, price, description, category) VALUES ($1, $2, $3, $4) RETURNING *`,
+    [name, price, description, category]
+  );
+  return response.rows[0];
+};
+
+const updateProduct = async (id, product) => {
+  const { name, price, description, category } = product;
+  const response = await client.query(
+    `UPDATE products SET name = $1, price = $2, description = $3, category = $4 WHERE id = $5 RETURNING *`,
+    [name, price, description, category, id]
+  );
+  return response.rows[0];
+};
+
+const deleteProduct = async (id) => {
+  await client.query(`DELETE FROM products WHERE id = $1`, [id]);
+  return { id };
+};
+
 const getAllCart = async () => {
   const response = await client.query(`SELECT * FROM cart ORDER BY id ASC`);
   return response.rows;
@@ -53,5 +80,9 @@ module.exports = {
   getCartByUserId,
   postCartByUserId,
   deleteCartByUserId,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
   client,
 };
