@@ -2,7 +2,7 @@
 {
   "scripts": {
     "scss": "sass --watch ./src/client/style/index.scss ./src/index.css",
-    "start": "node index.js",
+    "start": "node index.js dev",
     "start:dev": "nodemon ./src/server/api/index.js"
   },
   "dependencies": {
