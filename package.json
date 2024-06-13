@@ -1,3 +1,4 @@
+
 {
   "scripts": {
     "scss": "sass --watch ./src/client/style/index.scss ./src/index.css",
