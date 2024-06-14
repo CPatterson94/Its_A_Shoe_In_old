@@ -1,12 +1,16 @@
 const pg = require("pg");
+const jwt = require('jsonwebtoken');
+const jwtSecret = 'Whitegyalshoes';
 
 const client = new pg.Client("postgres://localhost/shoe_store");
 
 const addUser = async (user) => {
-  const { username, password } = user;
+  const {name, username, password } = user;
+  const token = await jwt.sign({ id: user.id }, jwtSecret);
+  console.log("Token generated:", token);
   const response = await client.query(
-      `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`,
-      [username, password]
+      `INSERT INTO users (name, username, password) VALUES ($1, $2, $3) RETURNING *`,
+      [name, username, password]
   );
   return response.rows[0];
 };

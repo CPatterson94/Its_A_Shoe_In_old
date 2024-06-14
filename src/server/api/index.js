@@ -1,7 +1,7 @@
 const express = require("express");
 const { client } = require("./db");
-const authenticateToken = require("./authenticateToken");
-const authRoutes = require("./auth");
+const authenticateToken = require("../auth/middleware");
+const authRoutes = require("../auth/auth");
 
 const app = express();
 app.use(express.json());
