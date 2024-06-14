@@ -2,6 +2,20 @@ const pg = require("pg");
 
 const client = new pg.Client("postgres://localhost/shoe_store");
 
+const addUser = async (user) => {
+  const { username, password } = user;
+  const response = await client.query(
+      `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`,
+      [username, password]
+  );
+  return response.rows[0];
+};
+
+const getUserByUsername = async (username) => {
+  const response = await client.query(`SELECT * FROM users WHERE username = $1`, [username]);
+  return response.rows[0];
+};
+
 //USERS
 const getAllUsers = async () => {
   const response = await client.query(`SELECT * FROM users ORDER BY id ASC`);
@@ -92,6 +106,8 @@ const getSingleOrderById = async (id) => {
 };
 
 module.exports = {
+  addUser,
+  getUserByUsername,
   getAllUsers,
   getAllProducts,
   getAllCart,
