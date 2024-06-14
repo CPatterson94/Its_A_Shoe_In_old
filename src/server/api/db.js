@@ -2,10 +2,19 @@ const pg = require("pg");
 
 const client = new pg.Client("postgres://localhost/shoe_store");
 
+//USERS
 const getAllUsers = async () => {
   const response = await client.query(`SELECT * FROM users ORDER BY id ASC`);
   return response.rows;
 };
+const getSingleUserById = async (id) => {
+  const response = await client.query(`SELECT * FROM users WHERE id = $1`, [
+    id,
+  ]);
+  return response.rows[0];
+};
+
+//PRODUCTS
 const getAllProducts = async () => {
   const response = await client.query(`SELECT * FROM products ORDER BY id ASC`);
   return response.rows;
@@ -37,16 +46,12 @@ const deleteProduct = async (id) => {
   return { id };
 };
 
+//CART
 const getAllCart = async () => {
   const response = await client.query(`SELECT * FROM cart ORDER BY id ASC`);
   return response.rows;
 };
-const getSingleUserById = async (id) => {
-  const response = await client.query(`SELECT * FROM users WHERE id = $1`, [
-    id,
-  ]);
-  return response.rows[0];
-};
+
 const getCartByUserId = async (params_id) => {
   const cart_response = await client.query(
     `SELECT * FROM cart WHERE user_id = $1`,
@@ -72,6 +77,20 @@ const deleteCartByUserId = async (id) => {
     id: id,
   };
 };
+
+//ORDERS
+const getAllOrders = async () => {
+  const response = await client.query(`SELECT * FROM orders ORDER BY id ASC`);
+  return response.rows;
+};
+
+const getSingleOrderById = async (id) => {
+  const response = await client.query(`SELECT * FROM orders WHERE id = $1`, [
+    id,
+  ]);
+  return response.rows[0];
+};
+
 module.exports = {
   getAllUsers,
   getAllProducts,
@@ -84,5 +103,7 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getAllOrders,
+  getSingleOrderById,
   client,
 };
