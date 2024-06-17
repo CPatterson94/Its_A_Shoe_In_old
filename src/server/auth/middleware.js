@@ -11,14 +11,16 @@ const authenticateToken = (req, res, next) => {
 console.log(token, jwtSecret)
   jwt.verify(token, jwtSecret, (err, user) => {
     if (err) return res.sendStatus(403);
-    req.user = user;
+    req.user = user.data;
     next();
   });
 };
 
 
   const isAdmin = (req, res, next) => {
-    if (req.user && req.user.isAdmin ===true) {
+    console.log("hi")
+    console.log(req.user)
+    if (req.user && req.user.isadmin ===true) {
       next(); 
     } else {
       res.sendStatus(403); 
